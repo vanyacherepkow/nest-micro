@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  auth:
+    build:
+      context: .
+      dockerfile: ./auth/Dockerfile
+    container_name: auth
+    ports:
+      - 3000:3000
+      - 4000:4000
+    # env_file:
+    #   - ./.env
+  user:
+    build:
+      context: ./
+      dockerfile: ./user/Dockerfile
+    container_name: user
+    ports:
+      - 3010:3010
+      - 4010:4010
+    # env_file:
+    #   - ./.env
+  post:
+    build:
+      context: .
+      dockerfile: ./post/Dockerfile
+    container_name: post
+    ports:
+      - 3020:3020
+      - 4020:4020
+  db:
+    image: postgres:13
+    container_name: db
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./dataset:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
